@@ -1,6 +1,53 @@
 local diagnostics = require("null-ls.builtins").diagnostics
 
 describe("diagnostics", function()
+    describe("spectral", function()
+        local linter = diagnostics.spectral
+        local parser = linter._opts.on_output
+
+        it("should create a diagnostic with an Warning severity", function()
+            local output = vim.json.decode([[
+                [
+                    {
+                        "code": "oas3-operation-security-defined",
+                        "path": [
+                                "security",
+                                "0",
+                                "bearer"
+                        ],
+                        "message": "API \"security\" values must match a scheme defined in the \"components.securitySchemes\" object.",
+                        "severity": 1,
+                        "range": {
+                                "start": {
+                                        "line": 659,
+                                        "character": 11
+                                },
+                                "end": {
+                                        "line": 659,
+                                        "character": 14
+                                }
+                        },
+                        "source": "/home/luizcorreia/repos/smiles/OpenApi/openapi.yaml"
+                    }
+                ]
+            ]])
+
+            local diagnostic = parser({ output = output })
+            assert.same({
+                {
+                    code = "oas3-operation-security-defined",
+                    col = 11,
+                    end_col = 14,
+                    end_row = 660,
+                    message = 'API "security" values must match a scheme defined in the "components.securitySchemes" object.',
+                    path = { "security", "0", "bearer" },
+                    row = 660,
+                    severity = 2,
+                    source = "Spectral",
+                },
+            }, diagnostic)
+        end)
+    end)
     describe("buf", function()
         local linter = diagnostics.buf
         local parser = linter._opts.on_output
@@ -357,6 +404,7 @@ describe("diagnostics", function()
         local function done(_diagnostics)
             teal_diagnostics = _diagnostics
         end
+
         parser({ content = file, output = output, temp_path = "tmp.tl" }, done)
 
         it("should create a diagnostic with a warning severity (no quote)", function()
@@ -1183,6 +1231,63 @@ describe("diagnostics", function()
             } ]])
             local diagnostic = parser({ output = output })
             assert.same({}, diagnostic)
+        end)
+    end)
+    describe("glslc", function()
+        local linter = diagnostics.glslc
+        local parser = linter._opts.on_output
+
+        -- some of the example output gotten from: https://github.com/google/shaderc/blob/main/glslc/test/messages_tests.py
+        it("glslc error", function()
+            local output =
+                [[glslc: error: 'path/to/tempfile.glsl': .glsl file encountered but no -fshader-stage specified ahead]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                severity = 1,
+                message = ".glsl file encountered but no -fshader-stage specified ahead",
+            }, diagnostic)
+        end)
+        it("line error with quotes", function()
+            local output =
+                [[filename.glsl:14: error: 'non-opaque uniforms outside a block' : not allowed when using GLSL for Vulkan]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename.glsl",
+                row = "14",
+                severity = 1,
+                message = "'non-opaque uniforms outside a block' : not allowed when using GLSL for Vulkan",
+            }, diagnostic)
+        end)
+        it("line error with empty quotes", function()
+            local output = [[filename2.glsl:2: error: '' : function does not return a value: main]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename2.glsl",
+                row = "2",
+                severity = 1,
+                message = "'' : function does not return a value: main",
+            }, diagnostic)
+        end)
+        it("line warning without quotes", function()
+            local output =
+                [[filename3.glsl:2: warning: attribute deprecated in version 130; may be removed in future release]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename3.glsl",
+                row = "2",
+                severity = 2,
+                message = "attribute deprecated in version 130; may be removed in future release",
+            }, diagnostic)
+        end)
+        it("file warning", function()
+            local output =
+                [[filename4.glsl: warning: (version, profile) forced to be (400, none), while in source code it is (550, none)]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename4.glsl",
+                severity = 2,
+                message = "(version, profile) forced to be (400, none), while in source code it is (550, none)",
+            }, diagnostic)
         end)
     end)
 end)

@@ -50,6 +50,7 @@ local defaults = {
     debounce = 250,
     debug = false,
     default_timeout = 5000,
+    diagnostic_config = nil,
     diagnostics_format = "#{m}",
     fallback_severity = vim.diagnostic.severity.ERROR,
     log_level = "warn",
@@ -57,7 +58,7 @@ local defaults = {
     on_attach = nil,
     on_init = nil,
     on_exit = nil,
-    root_dir = u.root_pattern(".null-ls-root", "Makefile", ".git"),
+    root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git"),
     sources = nil,
     update_in_insert = false,
 }
@@ -108,6 +109,15 @@ users can override the timeout period on a per-source basis, too (see
 Specifying a timeout with a value less than zero will prevent commands from
 timing out.
 
+### diagnostic_config (table, optional)
+
+Specifies diagnostic display options for null-ls sources, as described in
+`:help vim.diagnostic.config()`. (null-ls uses separate namespaces for each
+source, so server-wide configuration will not work as expected.)
+
+You can also configure `diagnostic_config` per built-in by using the `with`
+method, described in [BUILTIN_CONFIG](BUILTIN_CONFIG.md).
+
 ### diagnostics_format (string)
 
 Sets the default format used for diagnostics. The plugin will replace the
@@ -129,8 +139,8 @@ Formats diagnostics as follows:
 [2148] Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive. (shellcheck)
 ```
 
-You can also set `diagnostics_format` for built-ins by using the `with` method,
-described in [BUILTIN_CONFIG](BUILTIN_CONFIG.md).
+You can also configure `diagnostics_format` per built-in by using the `with`
+method, described in [BUILTIN_CONFIG](BUILTIN_CONFIG.md).
 
 ### fallback_severity (number)
 
@@ -143,14 +153,14 @@ Enables or disables logging to file.
 
 Plugin logs messages on several logging levels to following destinations:
 
-* file, can be inspected by `:NullLsLog`.
-* neovim's notification area.
+- file, can be inspected by `:NullLsLog`.
+- neovim's notification area.
 
 ### notify_format (string, optional)
 
-Sets the default format for `vim.notify()` messages.
-Can be used to customize 3rd party notification plugins
-like [nvim-notify](https://github.com/rcarriga/nvim-notify). 
+Sets the default format for `vim.notify()` messages. Can be used to customize
+3rd party notification plugins like
+[nvim-notify](https://github.com/rcarriga/nvim-notify).
 
 ### on_attach (function, optional)
 
@@ -217,7 +227,8 @@ to `true` if you don't experience performance issues with your sources.
 
 Note that by default, Neovim will not display updated diagnostics in insert
 mode. Together with the option above, you need to pass `update_in_insert = true`
-to `vim.diagnostic.config` for diagnostics to work as expected. See `:help vim.diagnostic.config` for more info.
+to `vim.diagnostic.config` for diagnostics to work as expected. See
+`:help vim.diagnostic.config` for more info.
 
 ## Explicitly defining the project root
 

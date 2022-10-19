@@ -25,13 +25,25 @@ return {
   chktex = {
     filetypes = { "tex" }
   },
+  clang_check = {
+    filetypes = { "c", "cpp" }
+  },
   clj_kondo = {
     filetypes = { "clojure" }
+  },
+  cmake_lint = {
+    filetypes = { "cmake" }
   },
   codespell = {
     filetypes = {}
   },
+  commitlint = {
+    filetypes = { "gitcommit" }
+  },
   cppcheck = {
+    filetypes = { "cpp", "c" }
+  },
+  cpplint = {
     filetypes = { "cpp", "c" }
   },
   credo = {
@@ -79,6 +91,9 @@ return {
   gitlint = {
     filetypes = { "gitcommit" }
   },
+  glslc = {
+    filetypes = { "glsl" }
+  },
   golangci_lint = {
     filetypes = { "go" }
   },
@@ -88,16 +103,25 @@ return {
   haml_lint = {
     filetypes = { "haml" }
   },
+  jshint = {
+    filetypes = { "javascript" }
+  },
   jsonlint = {
     filetypes = { "json" }
   },
   ktlint = {
     filetypes = { "kotlin" }
   },
+  ltrs = {
+    filetypes = { "text", "markdown", "markdown" }
+  },
   luacheck = {
     filetypes = { "lua" }
   },
   markdownlint = {
+    filetypes = { "markdown" }
+  },
+  markdownlint_cli2 = {
     filetypes = { "markdown" }
   },
   mdl = {
@@ -114,6 +138,9 @@ return {
   },
   opacheck = {
     filetypes = { "rego" }
+  },
+  perlimports = {
+    filetypes = { "perl" }
   },
   php = {
     filetypes = { "php" }
@@ -145,6 +172,9 @@ return {
   puppet_lint = {
     filetypes = { "puppet", "epuppet" }
   },
+  pycodestyle = {
+    filetypes = { "python" }
+  },
   pydocstyle = {
     filetypes = { "python" }
   },
@@ -173,16 +203,22 @@ return {
     filetypes = { "ruby" }
   },
   selene = {
-    filetypes = { "lua" }
+    filetypes = { "lua", "luau" }
   },
   semgrep = {
     filetypes = { "typescript", "typescriptreact", "ruby", "python", "java", "go" }
+  },
+  semistandardjs = {
+    filetypes = { "javascript", "javascriptreact" }
   },
   shellcheck = {
     filetypes = { "sh" }
   },
   solhint = {
     filetypes = { "solidity" }
+  },
+  spectral = {
+    filetypes = { "yaml", "json" }
   },
   sqlfluff = {
     filetypes = { "sql" }
@@ -213,6 +249,9 @@ return {
   },
   tidy = {
     filetypes = { "html", "xml" }
+  },
+  todo_comments = {
+    filetypes = {}
   },
   trail_space = {
     filetypes = {}

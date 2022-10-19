@@ -31,6 +31,7 @@ return h.make_builtin({
         "jsonc",
         "yaml",
         "markdown",
+        "markdown.mdx",
         "graphql",
         "handlebars",
     },
@@ -43,7 +44,7 @@ return h.make_builtin({
             { row_offset = -1, col_offset = -1 }
         ),
         to_stdin = true,
-        dynamic_command = cmd_resolver.from_node_modules,
+        dynamic_command = cmd_resolver.from_node_modules(),
         cwd = h.cache.by_bufnr(function(params)
             return u.root_pattern(
                 -- https://prettier.io/docs/en/configuration.html
@@ -54,9 +55,9 @@ return h.make_builtin({
                 ".prettierrc.json5",
                 ".prettierrc.js",
                 ".prettierrc.cjs",
-                ".prettier.config.js",
-                ".prettier.config.cjs",
                 ".prettierrc.toml",
+                "prettier.config.js",
+                "prettier.config.cjs",
                 "package.json"
             )(params.bufname)
         end),

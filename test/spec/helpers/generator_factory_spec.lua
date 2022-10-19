@@ -1,3 +1,4 @@
+local mock = require("luassert.mock")
 local stub = require("luassert.stub")
 
 local c = require("null-ls.config")
@@ -5,12 +6,15 @@ local helpers = require("null-ls.helpers")
 local loop = require("null-ls.loop")
 local s = require("null-ls.state")
 
+mock(require("null-ls.logger"), true)
+
 local test_utils = require("null-ls.test-utils")
 local root = vim.fn.getcwd()
 
 describe("generator_factory", function()
     stub(loop, "spawn")
     stub(loop, "temp_file")
+    stub(loop, "read_file")
     stub(s, "get_cache")
     stub(s, "set_cache")
 
@@ -40,6 +44,7 @@ describe("generator_factory", function()
 
         loop.spawn:clear()
         loop.temp_file:clear()
+        loop.read_file:clear()
 
         s.get_cache:clear()
         s.set_cache:clear()
@@ -128,7 +133,9 @@ describe("generator_factory", function()
             local parsed = loop.spawn.calls[1].refs[2]
             assert.same(parsed, generator_opts.args)
         end)
+    end)
 
+    describe("parse_env", function()
         it("should pass in the environment variables to the command", function()
             generator_opts.env = { TEST = "TESTING" }
 
@@ -137,6 +144,22 @@ describe("generator_factory", function()
 
             local parsed = loop.spawn.calls[1].refs[3]
             assert.same(parsed.env, generator_opts.env)
+        end)
+
+        it("should resolve function as a table of environment variables", function()
+            local environment_variables = { TEST = "TESTING" }
+
+            generator_opts.env = function()
+                return environment_variables
+            end
+
+            local generator = helpers.generator_factory(generator_opts)
+            local params = {}
+            generator.fn(params, done)
+
+            local parsed = loop.spawn.calls[1].refs[3]
+            assert.same(parsed.env, environment_variables)
+            assert.same(params.command, command)
         end)
     end)
 
@@ -298,7 +321,7 @@ describe("generator_factory", function()
         end)
 
         it("should trigger deregistration if validation fails", function()
-            vim.validate = function()
+            vim.validate = function(_)
                 error("validation failed")
             end
 
@@ -320,27 +343,6 @@ describe("generator_factory", function()
     end)
 
     describe("command", function()
-        it("should trigger deregistration if command is not executable", function()
-            generator_opts.command = "nonexistent"
-
-            local generator = helpers.generator_factory(generator_opts)
-            generator.fn({}, done)
-
-            assert.stub(done).was_called_with({ _should_deregister = true })
-        end)
-
-        it("should not validate command if dynamic_command is set", function()
-            generator_opts.command = "nonexistent"
-            generator_opts.dynamic_command = function()
-                return "cat"
-            end
-
-            local generator = helpers.generator_factory(generator_opts)
-            generator.fn({}, done)
-
-            assert.stub(done).was_not_called()
-        end)
-
         it("should call command function with params ", function()
             local params
             generator_opts.command = function(_params)
@@ -574,8 +576,8 @@ describe("generator_factory", function()
                 cleanup:clear()
             end)
 
-            it("should call loop.temp_file with content and file extension", function()
-                assert.stub(loop.temp_file).was_called_with("buffer content", "lua")
+            it("should call loop.temp_file with content and bufname", function()
+                assert.stub(loop.temp_file).was_called_with("buffer content", params.bufname)
             end)
 
             it("should replace $FILENAME arg with temp path", function()
@@ -597,20 +599,11 @@ describe("generator_factory", function()
 
         describe("from_temp_file", function()
             local cleanup = stub.new()
-            stub(vim.loop, "fs_open")
-            stub(vim.loop, "fs_fstat")
-            stub(vim.loop, "fs_read")
-            stub(vim.loop, "fs_close")
-
-            local mock_fd = 99
-            local mock_stat = { size = 100 }
 
             local params
             local on_stdout_end
             before_each(function()
                 loop.temp_file.returns("temp-path", cleanup)
-                vim.loop.fs_open.returns(99)
-                vim.loop.fs_fstat.returns(mock_stat)
 
                 generator_opts.to_temp_file = true
                 generator_opts.from_temp_file = true
@@ -621,22 +614,17 @@ describe("generator_factory", function()
                 on_stdout_end = loop.spawn.calls[1].refs[3].on_stdout_end
             end)
             after_each(function()
-                vim.loop.fs_open:clear()
-                vim.loop.fs_fstat:clear()
                 cleanup:clear()
             end)
 
-            it("should call vim.loop methods", function()
+            it("should call loop.read_file with temp path", function()
                 on_stdout_end()
 
-                assert.stub(vim.loop.fs_open).was_called_with("temp-path", "r", 438)
-                assert.stub(vim.loop.fs_fstat).was_called_with(mock_fd)
-                assert.stub(vim.loop.fs_read).was_called_with(mock_fd, mock_stat.size, 0)
-                assert.stub(vim.loop.fs_close).was_called_with(mock_fd)
+                assert.stub(loop.read_file).was_called_with("temp-path")
             end)
 
             it("should set params.output to temp file content", function()
-                vim.loop.fs_read.returns("content")
+                loop.read_file.returns("content")
 
                 on_stdout_end()
 

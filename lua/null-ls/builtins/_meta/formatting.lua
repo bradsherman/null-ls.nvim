@@ -25,6 +25,9 @@ return {
   black = {
     filetypes = { "python" }
   },
+  blade_formatter = {
+    filetypes = { "blade" }
+  },
   blue = {
     filetypes = { "python" }
   },
@@ -39,6 +42,9 @@ return {
   },
   cabal_fmt = {
     filetypes = { "cabal" }
+  },
+  cbfmt = {
+    filetypes = { "markdown", "org" }
   },
   clang_format = {
     filetypes = { "c", "cpp", "cs", "java", "cuda" }
@@ -65,7 +71,7 @@ return {
     filetypes = { "dart" }
   },
   deno_fmt = {
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
+    filetypes = { "javascript", "javascriptreact", "json", "jsonc", "markdown", "typescript", "typescriptreact" }
   },
   dfmt = {
     filetypes = { "d" }
@@ -75,6 +81,9 @@ return {
   },
   djlint = {
     filetypes = { "django", "jinja.html", "htmldjango" }
+  },
+  dprint = {
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "json", "markdown", "toml", "rust", "roslyn" }
   },
   elm_format = {
     filetypes = { "elm" }
@@ -112,6 +121,9 @@ return {
   gdformat = {
     filetypes = { "gd", "gdscript", "gdscript3" }
   },
+  gersemi = {
+    filetypes = { "cmake" }
+  },
   gofmt = {
     filetypes = { "go" }
   },
@@ -119,6 +131,9 @@ return {
     filetypes = { "go" }
   },
   goimports = {
+    filetypes = { "go" }
+  },
+  goimports_reviser = {
     filetypes = { "go" }
   },
   golines = {
@@ -139,6 +154,9 @@ return {
   json_tool = {
     filetypes = { "json" }
   },
+  just = {
+    filetypes = { "just" }
+  },
   ktlint = {
     filetypes = { "kotlin" }
   },
@@ -147,6 +165,9 @@ return {
   },
   lua_format = {
     filetypes = { "lua" }
+  },
+  markdown_toc = {
+    filetypes = { "markdown" }
   },
   markdownlint = {
     filetypes = { "markdown" }
@@ -169,6 +190,21 @@ return {
   nixpkgs_fmt = {
     filetypes = { "nix" }
   },
+  npm_groovy_lint = {
+    filetypes = { "groovy", "java", "Jenkinsfile" }
+  },
+  ocamlformat = {
+    filetypes = { "ocaml" }
+  },
+  ocdc = {
+    filetypes = { "markdown" }
+  },
+  packer = {
+    filetypes = { "hcl" }
+  },
+  perlimports = {
+    filetypes = { "perl" }
+  },
   perltidy = {
     filetypes = { "perl" }
   },
@@ -185,16 +221,16 @@ return {
     filetypes = { "php" }
   },
   prettier = {
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" }
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "markdown.mdx", "graphql", "handlebars" }
   },
   prettier_d_slim = {
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" }
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "markdown.mdx", "graphql", "handlebars" }
   },
   prettier_standard = {
     filetypes = { "javascript", "javascriptreact" }
   },
   prettierd = {
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" }
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yaml", "markdown", "markdown.mdx", "graphql", "handlebars" }
   },
   prismaFmt = {
     filetypes = { "prisma" }
@@ -208,11 +244,17 @@ return {
   puppet_lint = {
     filetypes = { "puppet", "epuppet" }
   },
+  purs_tidy = {
+    filetypes = { "purescript" }
+  },
   qmlformat = {
     filetypes = { "qml" }
   },
   raco_fmt = {
     filetypes = { "racket" }
+  },
+  rego = {
+    filetypes = { "rego" }
   },
   remark = {
     filetypes = { "markdown" }
@@ -241,6 +283,9 @@ return {
   scalafmt = {
     filetypes = { "scala" }
   },
+  semistandardjs = {
+    filetypes = { "javascript", "javascriptreact" }
+  },
   shellharden = {
     filetypes = { "sh" }
   },
@@ -268,8 +313,11 @@ return {
   styler = {
     filetypes = { "r", "rmd" }
   },
+  stylish_haskell = {
+    filetypes = { "haskell" }
+  },
   stylua = {
-    filetypes = { "lua" }
+    filetypes = { "lua", "luau" }
   },
   surface = {
     filetypes = { "elixir", "surface" }
@@ -285,6 +333,9 @@ return {
   },
   terraform_fmt = {
     filetypes = { "terraform", "tf" }
+  },
+  textlint = {
+    filetypes = {}
   },
   tidy = {
     filetypes = { "html", "xml" }
@@ -306,6 +357,9 @@ return {
   },
   xmllint = {
     filetypes = { "xml" }
+  },
+  yamlfmt = {
+    filetypes = { "yaml" }
   },
   yapf = {
     filetypes = { "python" }

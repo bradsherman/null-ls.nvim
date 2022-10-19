@@ -26,13 +26,14 @@ return h.make_builtin({
         "jsonc",
         "yaml",
         "markdown",
+        "markdown.mdx",
         "graphql",
         "handlebars",
     },
     generator_opts = {
         command = "prettierd",
         args = { "$FILENAME" },
-        dynamic_command = cmd_resolver.from_node_modules,
+        dynamic_command = cmd_resolver.from_node_modules(),
         to_stdin = true,
         cwd = h.cache.by_bufnr(function(params)
             return u.root_pattern(
@@ -44,9 +45,9 @@ return h.make_builtin({
                 ".prettierrc.json5",
                 ".prettierrc.js",
                 ".prettierrc.cjs",
-                ".prettier.config.js",
-                ".prettier.config.cjs",
                 ".prettierrc.toml",
+                "prettier.config.js",
+                "prettier.config.cjs",
                 "package.json"
             )(params.bufname)
         end),

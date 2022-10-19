@@ -31,6 +31,10 @@
   [busted](https://github.com/Olivine-Labs/busted). If you're unsure how to
   write tests for your PR, please let us know and we can help.
 
+- To format Lua code blocks in our Markdown documentation, we recommend
+  [cbfmt](https://github.com/lukas-reineke/cbfmt), which is available as a
+  null-ls built-in.
+
 ## Contributing built-ins
 
 - Check if there is an open issue requesting the built-in you are adding and
@@ -100,11 +104,11 @@ local diagnostic = {
 - Do not include the source's name or code in the message.
 
 - If at all possible, please add one or more tests to check whether your source
-  produces the correct output given an actual raw diagnostic. See [the
-  existing tests](../test/spec/builtins/diagnostics_spec.lua) for examples.
+  produces the correct output given an actual raw diagnostic. See
+  [the existing tests](../test/spec/builtins/diagnostics_spec.lua) for examples.
 
-- If your source can produce project-level diagnostics (i.e. diagnostics for more
-  than one file at a time), use the `multiple_files` option described in
+- If your source can produce project-level diagnostics (i.e. diagnostics for
+  more than one file at a time), use the `multiple_files` option described in
   [HELPERS](./HELPERS.md).
 
   - Specify that your source supports project diagnostics in its documentation.
